@@ -5,7 +5,9 @@ using UnityEngine;
 public class SuitcaseSpawner : MonoBehaviour
 {
 
-    public GameObject[] Suitcases;
+    public GameObject[] suitcases;
+
+    private List<GameObject> suitcasesList = new List<GameObject>();
 
     const int MAX_SUITCASES = 50;
 
@@ -19,7 +21,18 @@ public class SuitcaseSpawner : MonoBehaviour
 
     void Start()
     {
-        spawnTimer = 0;
+        spawnTimer = spawnSpeed;
+
+        GameObject temp;
+        foreach(GameObject o in suitcases)
+        {
+            for(int i = 0; i < (int)(MAX_SUITCASES/ suitcases.Length); i++)
+            {
+                temp = Instantiate(o);
+                temp.SetActive(false);
+                suitcasesList.Add(temp);
+            }
+        }
     }
 
 
@@ -31,7 +44,17 @@ public class SuitcaseSpawner : MonoBehaviour
             //Time to spawn suitcase
             if (spawnTimer >= spawnSpeed)
             {
-                Instantiate(Suitcases[Random.Range(0, Suitcases.Length)]);
+                if(suitcasesList.Count > 0)
+                {
+                    GameObject target;
+                    do
+                    {
+                        target = suitcasesList[Random.Range(0, suitcasesList.Count)];
+                    }
+                    while (target.activeSelf != false);
+                    target.GetComponent<SuitcaseBehaviour>().Initializes();
+                }
+                
                 spawnTimer = 0;
             }
 

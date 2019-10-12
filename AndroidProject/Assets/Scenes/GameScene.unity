@@ -163,9 +163,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f90db3d1b49eab54587b8c90acbbc553, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Suitcases:
+  suitcases:
+  - {fileID: 974541253011872214, guid: 9dcc137fe99587e4baf8a2719ccc5d47, type: 3}
+  - {fileID: 6763084081838915805, guid: 729a5966129a9c841ae7425101648083, type: 3}
+  - {fileID: 402302089781078130, guid: 36f90440cbb3e514b9c5c124acafa3b6, type: 3}
   - {fileID: 1031594107344293584, guid: 8b30840b1e5923e468d5b8aa88ad6dc0, type: 3}
-  spawnSpeed: 10
+  spawnSpeed: 3
 --- !u!1 &445072347
 GameObject:
   m_ObjectHideFlags: 0
@@ -518,7 +521,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 856397232}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 2.63}
+  m_LocalPosition: {x: 0, y: 0, z: 5}
   m_LocalScale: {x: 5.953, y: 5.953, z: 5.953}
   m_Children: []
   m_Father: {fileID: 0}
