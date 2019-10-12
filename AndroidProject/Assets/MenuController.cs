@@ -78,8 +78,8 @@ public class MenuController : MonoBehaviour
                 GameObject.Find("Score (2)").GetComponent<TextMeshProUGUI>().text = highScores[2].ToString();
                 GameObject.Find("Score (3)").GetComponent<TextMeshProUGUI>().text = highScores[3].ToString();
                 GameObject.Find("Score (4)").GetComponent<TextMeshProUGUI>().text = highScores[4].ToString();
-                GameObject.Find("Name").GetComponent<TextMeshProUGUI>().text = "Arnau";
-                GameObject.Find("FlightNumber").GetComponent<TextMeshProUGUI>().text = "JLFS-1987";
+                GameObject.Find("Name").GetComponent<TextMeshProUGUI>().text = _GameController.instance.userName;
+                GameObject.Find("FlightNumber").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.myUser.flight_name;
                 UserScoresResponded = false;
             }
             if (OtherUsersScores) {
@@ -110,15 +110,17 @@ public class MenuController : MonoBehaviour
 
                     animationTimer += Time.deltaTime;
                     recivedResponse = true;
-                    if (recivedResponse && !instantiate)
+                    if (_GameController.instance.API.airportRankingAvaileable && !instantiate)
                     {
                         GameObject target = GameObject.Find("PlaneScrollView").transform.GetChild(0).GetChild(0).gameObject;
                         target.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 220 * 200);
-                        for (int i = 0; i < 200; i++)
+                        for (int i = 0; i < _GameController.instance.API.airportRanking.airport_scores.Length; i++)
                         {
                             GameObject aux = Instantiate(PlaneViewPrefab, GameObject.Find("PlaneScrollView").transform.GetChild(0).GetChild(0).transform);
                             aux.transform.position += new Vector3(0, target.GetComponent<RectTransform>().sizeDelta.y / 2 - 40 - i * 220, 0);
-                            aux.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (i + 1).ToString();
+                            aux.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (i + 1).ToString();//set Position number
+                            aux.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.airportRanking.airport_scores[i].number.ToString();///set plane name
+                            aux.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.airportRanking.airport_scores[i].total_score.ToString();
                         }
                         instantiate = true;
                     }

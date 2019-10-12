@@ -20,23 +20,28 @@ public class MenuButtonController : MonoBehaviour
 
     public void LoadNextLevel()
     {
-        serverResponded = true;
-        GameObject.Find("Canvas").GetComponent<MenuController>().AnimationTimer = 0;
-        GameObject.Find("Canvas").GetComponent<MenuController>().goToMenu = true;
+        _GameController.instance.userName = userName.text;
+
+        _GameController.instance.API.LogInUser(userName.text, flight.text);
+        
     }
     public void LoadNextScene(int i)
     {
         SceneManager.LoadScene(i, LoadSceneMode.Single);
+       
     }
-
     // Update is called once per frame
+    bool loaded = false;
     void Update()
     {
-        if (serverResponded)
+
+        if (_GameController.instance.API.myUserAvaileable && !serverResponded)
         {
-            //load next scene
-            //GameObject.Find("Debug").GetComponent<TextMeshProUGUI>().text = userName.text + " " + flight.text;
+            serverResponded = true;
+            GameObject.Find("Canvas").GetComponent<MenuController>().AnimationTimer = 0;
+            GameObject.Find("Canvas").GetComponent<MenuController>().goToMenu = true;
             GameObject.Find("Canvas").GetComponent<MenuController>().LoggedIn = true;
+            _GameController.instance.API.RequesAllFlightsScores();
         }
     }
 }

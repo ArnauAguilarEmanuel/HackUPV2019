@@ -23,6 +23,7 @@ public class _GameController : MonoBehaviour
     private float actualChangeTime = 20;
     private float colorOriginalSize;
     private float decresSpeed = 100;
+    public string userName;
 
     public float gameDuration { get => _gameDuration; }
 
@@ -32,6 +33,7 @@ public class _GameController : MonoBehaviour
     private float multiplier;
     private int combo;
     private int comboRequired;
+    public API_Comunication API;
     private GameObject scoreUI;
 
 
@@ -66,17 +68,21 @@ public class _GameController : MonoBehaviour
     }
     public void OnGameStart(Scene scene, LoadSceneMode mode)
     {
-        actualChangeTime = 0;
-       playerPoints = 0;
-       suitcasePoints = 10;
-       multiplier = 1;
-       combo = 0;
-       comboRequired = 10;
-       targetTag = GameObject.Find("SuitcaseSpawner").GetComponent<SuitcaseSpawner>().suitcases[Random.Range(0, GameObject.Find("SuitcaseSpawner").GetComponent<SuitcaseSpawner>().suitcases.Length)].tag;
-       Debug.Log(targetTag);
-       scoreUI = GameObject.Find("Score");
-        colorOriginalSize = GameObject.Find("Color").GetComponent<TextMeshProUGUI>().fontSize;
-       StartCoroutine(changeTargetTag());
+        API = GetComponent<API_Comunication>();
+        if(SceneManager.GetActiveScene().buildIndex != 0)
+        {
+            actualChangeTime = 0;
+           playerPoints = 0;
+           suitcasePoints = 10;
+           multiplier = 1;
+           combo = 0;
+           comboRequired = 10;
+           targetTag = GameObject.Find("SuitcaseSpawner").GetComponent<SuitcaseSpawner>().suitcases[Random.Range(0, GameObject.Find("SuitcaseSpawner").GetComponent<SuitcaseSpawner>().suitcases.Length)].tag;
+           Debug.Log(targetTag);
+           scoreUI = GameObject.Find("Score");
+            colorOriginalSize = GameObject.Find("Color").GetComponent<TextMeshProUGUI>().fontSize;
+           StartCoroutine(changeTargetTag());
+        }
     }
 
     public void ChangeScene(int i){
@@ -115,7 +121,7 @@ public class _GameController : MonoBehaviour
 
     private void Update()
     {
-        if (GameObject.Find("Color").GetComponent<TextMeshProUGUI>().fontSize > colorOriginalSize) GameObject.Find("Color").GetComponent<TextMeshProUGUI>().fontSize -= Time.deltaTime * decresSpeed;
+        if (SceneManager.GetActiveScene().buildIndex != 0 && GameObject.Find("Color").GetComponent<TextMeshProUGUI>().fontSize > colorOriginalSize) GameObject.Find("Color").GetComponent<TextMeshProUGUI>().fontSize -= Time.deltaTime * decresSpeed;
     }
 
     public void ProcessSuitcase(string tag, bool lose = false)

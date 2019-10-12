@@ -45,22 +45,34 @@ public class playerScores
     public int total_multiplayer;
 }
 
+public class planeScore
+{
+    public int flight_id;
+    public int total_score;
+    public int number;
+}
+public class allAirportScores
+{
+    public planeScore[] airport_scores;
+}
+
 [System.Serializable]
 public class MyFlightScores
 {
     public playerScores[] player_scores;
 }
 
-public class TestScript : MonoBehaviour
+public class API_Comunication : MonoBehaviour
 {
     private const string URL = "https://euw1.api.riotgames.com/lol/platform/v3/champion-rotations";
-    private const string LOG_IN_URL = "192.168.43.165/api/login";
+    private const string LOG_IN_URL = "http://269d78cc.ngrok.io/api/login";         ////// "http://bb3b86bd.ngrok.io/api/login";
     private const string END_GAME_URL = "192.168.43.165/api/endgame";
     private const string FLIGHT_SCORES_URL = "192.168.43.165/api/flightscores";
+    private const string ALL_FLIGHTS_SCORES_URL = "2";
     private const string KEY = "RGAPI-7188bdaf-74c7-483d-a766-c4bb581a69ba";
     private Text response;
 
-    public UserInfo myUser;
+    public UserInfo myUser; 
     public bool myUserAvaileable;
 
     public EndGameReturnInfo gameReturnedInfo;
@@ -68,6 +80,9 @@ public class TestScript : MonoBehaviour
 
     public MyFlightScores flightScores;
     public bool flightScoresAvaileable;
+
+    public allAirportScores airportRanking;
+    public bool airportRankingAvaileable;
 
     public void request()
     {
@@ -88,12 +103,17 @@ public class TestScript : MonoBehaviour
     {
         StartCoroutine(GetMyFlightScores(FlightId));
     }
+    public void RequesAllFlightsScores()
+    {
+        StartCoroutine(GetAllFlightsScores());
+    }
 
     public IEnumerator LogIn(string userName, string Flight)
     {
         WWWForm form = new WWWForm();
         form.AddField("user_name", userName);
         form.AddField("flight_name", Flight);
+        form.AddField("airport_id", 1);
         using (UnityWebRequest req = UnityWebRequest.Post(LOG_IN_URL, form))
         {
             yield return req.SendWebRequest();
@@ -170,6 +190,30 @@ public class TestScript : MonoBehaviour
         }
     }
 
+    public IEnumerator GetAllFlightsScores()
+    {
+        WWWForm form = new WWWForm();
+        using (UnityWebRequest req = UnityWebRequest.Post(ALL_FLIGHTS_SCORES_URL, form))
+        {
+            yield return req.SendWebRequest();
+
+            if (req.isNetworkError)
+            {
+                Debug.Log(req.error);
+            }
+            else if (req.isHttpError)
+            {
+                Debug.Log(req.error);
+            }
+            else
+            {
+                string data = req.downloadHandler.text;
+
+                airportRanking = JsonUtility.FromJson<allAirportScores>(data);
+                airportRankingAvaileable = true;
+            }
+        }
+    }
 
     IEnumerator OnResponse()
     {
@@ -190,42 +234,4 @@ public class TestScript : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Start()
-    {
-        LogInUser("Arnau", "Flight");
-    }
-    private bool auxiliar;
-    private bool auxiliar2;
-    private void Update()
-    {
-        if (myUserAvaileable)
-        {
-            if (!auxiliar)
-            {
-                Debug.Log(myUser.user_id);
-                Debug.Log(myUser.flight_id);
-                Debug.Log(myUser.flight_name);
-                Debug.Log("________________________________________________");
-                auxiliar = true;
-                //RequestEndGame(myUser.user_id.ToString(), myUser.flight_id.ToString(), 50000, 12);
-                RequestMyFlightScores(myUser.flight_id.ToString());
-            }
-            if (flightScoresAvaileable && !auxiliar2)
-            {
-                Debug.Log(gameReturnedInfo.total_score);
-                foreach(playerScores inf in flightScores.player_scores)
-                {
-                    Debug.Log(inf.user_id);
-                    Debug.Log(inf.total_score);
-                    Debug.Log(inf.total_multiplayer);
-                }
-                auxiliar2 = true;
-            }
-        }
-        else
-        {
-            Debug.Log("not availeable");
-        }
-    }
 }
