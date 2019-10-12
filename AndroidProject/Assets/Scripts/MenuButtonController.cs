@@ -41,7 +41,10 @@ public class MenuButtonController : MonoBehaviour
             GameObject.Find("Canvas").GetComponent<MenuController>().AnimationTimer = 0;
             GameObject.Find("Canvas").GetComponent<MenuController>().goToMenu = true;
             GameObject.Find("Canvas").GetComponent<MenuController>().LoggedIn = true;
-            _GameController.instance.API.RequesAllFlightsScores();
+            Debug.Log(_GameController.instance.currentAirport);
+            _GameController.instance.API.RequesAllFlightsScores(_GameController.instance.currentAirport);
+            _GameController.instance.API.RequestMyFlightScores(_GameController.instance.API.myUser.flight_id.ToString());
+            _GameController.instance.API.RequestBestScores(_GameController.instance.API.myUser.user_id.ToString(), _GameController.instance.API.myUser.flight_id.ToString());
         }
     }
 }

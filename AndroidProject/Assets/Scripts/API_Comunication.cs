@@ -25,32 +25,53 @@ public class UserInfo
 [System.Serializable]
 public class EndGameSendInfo
 {
-    public int user_id  ;
+    public int user_id;
     public int flight_id;
     public int score;
-    public int multiplayer;
+    public int multiplier;
 }
+[System.Serializable]
+public class GameInfo
+{
+    public int id;
+    public int user_id;
+    public int flight_id;
+    public int score;//score made 
+    public int multiplier;
+}
+
 [System.Serializable]
 public class EndGameReturnInfo
 {
-    public int total_score;
+    public float total_score;
+    public float flight_total_score;
+    public float flight_multiplier;
+    public EndGameSendInfo[] top_5;
+}
+
+public class basicTop5
+{
     public EndGameSendInfo[] top_5;
 }
 
 [System.Serializable]
 public class playerScores
 {
+    public string number;
     public int user_id;
+    public string name;
     public int total_score;
-    public int total_multiplayer;
+    public float total_multiplier;
 }
 
+[System.Serializable]
 public class planeScore
 {
     public int flight_id;
+    public string number;
     public int total_score;
-    public int number;
 }
+[System.Serializable]
 public class allAirportScores
 {
     public planeScore[] airport_scores;
@@ -59,18 +80,23 @@ public class allAirportScores
 [System.Serializable]
 public class MyFlightScores
 {
-    public playerScores[] player_scores;
+    public playerScores[] total_score;
 }
+
 
 public class API_Comunication : MonoBehaviour
 {
     private const string URL = "https://euw1.api.riotgames.com/lol/platform/v3/champion-rotations";
     private const string LOG_IN_URL = "http://269d78cc.ngrok.io/api/login";         ////// "http://bb3b86bd.ngrok.io/api/login";
-    private const string END_GAME_URL = "192.168.43.165/api/endgame";
-    private const string FLIGHT_SCORES_URL = "192.168.43.165/api/flightscores";
-    private const string ALL_FLIGHTS_SCORES_URL = "2";
+    private const string END_GAME_URL = "http://269d78cc.ngrok.io/api/endgame";
+    private const string TOP5_URL = "http://269d78cc.ngrok.io/api/top5";
+    private const string FLIGHT_SCORES_URL = "http://269d78cc.ngrok.io/api/flightscores";
+    private const string ALL_FLIGHTS_SCORES_URL = "269d78cc.ngrok.io/api/airportscores";
     private const string KEY = "RGAPI-7188bdaf-74c7-483d-a766-c4bb581a69ba";
     private Text response;
+
+    public basicTop5 top5;
+    public bool top5Availeable;
 
     public UserInfo myUser; 
     public bool myUserAvaileable;
@@ -93,6 +119,13 @@ public class API_Comunication : MonoBehaviour
         myUserAvaileable = false;
         StartCoroutine(LogIn(userName, Flight));
     }
+
+    public void RequestBestScores(string userId, string FlightId)
+    {
+        myUserAvaileable = false;
+        StartCoroutine(Top5(userId, FlightId));
+    }
+
     public void RequestEndGame(string userId, string FlightId, int score, float multiplayer)
     {
         gameReturnedInfoAvaileable = false;
@@ -101,11 +134,39 @@ public class API_Comunication : MonoBehaviour
 
     public void RequestMyFlightScores(string FlightId)
     {
+        flightScoresAvaileable = false;
         StartCoroutine(GetMyFlightScores(FlightId));
     }
-    public void RequesAllFlightsScores()
+    public void RequesAllFlightsScores(string FlightId)
     {
-        StartCoroutine(GetAllFlightsScores());
+        StartCoroutine(GetAllFlightsScores(FlightId));
+    }
+
+    public IEnumerator Top5(string userId, string FlightId)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("user_id", userId);
+        form.AddField("flight_id", userId);
+        using (UnityWebRequest req = UnityWebRequest.Post(TOP5_URL, form))
+        {
+            yield return req.SendWebRequest();
+
+            if (req.isNetworkError)
+            {
+                Debug.Log(req.error);
+            }
+            else if (req.isHttpError)
+            {
+                Debug.Log(req.error);
+            }
+            else
+            {
+                string data = req.downloadHandler.text;
+
+                top5 = JsonUtility.FromJson<basicTop5>(data);
+                top5Availeable = true;
+            }
+        }
     }
 
     public IEnumerator LogIn(string userName, string Flight)
@@ -113,7 +174,7 @@ public class API_Comunication : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("user_name", userName);
         form.AddField("flight_name", Flight);
-        form.AddField("airport_id", 1);
+        form.AddField("airport_id", 1.ToString());
         using (UnityWebRequest req = UnityWebRequest.Post(LOG_IN_URL, form))
         {
             yield return req.SendWebRequest();
@@ -139,6 +200,7 @@ public class API_Comunication : MonoBehaviour
     {
         WWWForm form = new WWWForm();
         form.AddField("flight_id", FlightId);
+        Debug.Log("helo?");
         using (UnityWebRequest req = UnityWebRequest.Post(FLIGHT_SCORES_URL, form))
         {
             yield return req.SendWebRequest();
@@ -154,7 +216,7 @@ public class API_Comunication : MonoBehaviour
             else
             {
                 string data = req.downloadHandler.text;
-
+                Debug.Log(data);
                 flightScores = JsonUtility.FromJson<MyFlightScores>(data);
                 flightScoresAvaileable = true;
             }
@@ -190,9 +252,10 @@ public class API_Comunication : MonoBehaviour
         }
     }
 
-    public IEnumerator GetAllFlightsScores()
+    public IEnumerator GetAllFlightsScores(string FlightId)
     {
         WWWForm form = new WWWForm();
+        form.AddField("airport_id", FlightId);
         using (UnityWebRequest req = UnityWebRequest.Post(ALL_FLIGHTS_SCORES_URL, form))
         {
             yield return req.SendWebRequest();
@@ -208,7 +271,6 @@ public class API_Comunication : MonoBehaviour
             else
             {
                 string data = req.downloadHandler.text;
-
                 airportRanking = JsonUtility.FromJson<allAirportScores>(data);
                 airportRankingAvaileable = true;
             }

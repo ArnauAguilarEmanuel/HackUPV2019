@@ -3021,7 +3021,7 @@ RectTransform:
   m_GameObject: {fileID: 1428364293}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 83.78572, y: 83.78572, z: 83.78572}
+  m_LocalScale: {x: 159.53468, y: 159.53468, z: 159.53468}
   m_Children: []
   m_Father: {fileID: 1180102899}
   m_RootOrder: 0
@@ -4456,6 +4456,7 @@ MonoBehaviour:
   flightScores:
     player_scores: []
   flightScoresAvaileable: 0
+  airportRankingAvaileable: 0
 --- !u!1 &1856459472
 GameObject:
   m_ObjectHideFlags: 0

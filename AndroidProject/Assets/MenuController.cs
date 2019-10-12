@@ -71,25 +71,27 @@ public class MenuController : MonoBehaviour
     {
         if (loggedIn)
         {
-            if (UserScoresResponded)
+            if (_GameController.instance.API.top5Availeable)
             {
-                GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = highScores[0].ToString();
-                GameObject.Find("Score (1)").GetComponent<TextMeshProUGUI>().text = highScores[1].ToString();
-                GameObject.Find("Score (2)").GetComponent<TextMeshProUGUI>().text = highScores[2].ToString();
-                GameObject.Find("Score (3)").GetComponent<TextMeshProUGUI>().text = highScores[3].ToString();
-                GameObject.Find("Score (4)").GetComponent<TextMeshProUGUI>().text = highScores[4].ToString();
+                GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[0].score.ToString();
+                GameObject.Find("Score (1)").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[1].score.ToString();
+                GameObject.Find("Score (2)").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[2].score.ToString();
+                GameObject.Find("Score (3)").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[3].score.ToString();
+                GameObject.Find("Score (4)").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[4].score.ToString();
                 GameObject.Find("Name").GetComponent<TextMeshProUGUI>().text = _GameController.instance.userName;
                 GameObject.Find("FlightNumber").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.myUser.flight_name;
                 UserScoresResponded = false;
             }
-            if (OtherUsersScores) {
+            if (_GameController.instance.API.flightScoresAvaileable) {
                 GameObject target = GameObject.Find("FlightScrollView").transform.GetChild(0).GetChild(0).gameObject;
                 target.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 220 * 200);
-                for (int i = 0; i < 200; i++)
+                for (int i = 0; i < _GameController.instance.API.flightScores.total_score.Length; i++)
                 {
                     GameObject aux = Instantiate(FlightViewPrefab, GameObject.Find("FlightScrollView").transform.GetChild(0).GetChild(0).transform);
                     aux.transform.position += new Vector3(0, target.GetComponent<RectTransform>().sizeDelta.y / 2 - 40 - i * 220, 0);
-                    aux.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = ("x12").ToString();
+                    aux.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "x"+_GameController.instance.API.flightScores.total_score[i].total_multiplier.ToString();
+                    aux.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.flightScores.total_score[i].name;
+                    aux.transform.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.flightScores.total_score[i].total_score.ToString();
                 }
                 OtherUsersScores = false;
             }
@@ -113,7 +115,7 @@ public class MenuController : MonoBehaviour
                     if (_GameController.instance.API.airportRankingAvaileable && !instantiate)
                     {
                         GameObject target = GameObject.Find("PlaneScrollView").transform.GetChild(0).GetChild(0).gameObject;
-                        target.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 220 * 200);
+                        target.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 220 * _GameController.instance.API.airportRanking.airport_scores.Length);
                         for (int i = 0; i < _GameController.instance.API.airportRanking.airport_scores.Length; i++)
                         {
                             GameObject aux = Instantiate(PlaneViewPrefab, GameObject.Find("PlaneScrollView").transform.GetChild(0).GetChild(0).transform);
@@ -139,7 +141,6 @@ public class MenuController : MonoBehaviour
                     gameMenu.transform.position += (gameMenu.GetComponent<RectTransform>().localPosition.x<0)?  new Vector3(Time.deltaTime * animationSpeed * 10 * animationTimer, 0, 0): -new Vector3(Time.deltaTime * animationSpeed * 10 * animationTimer, 0, 0);
                     if (Mathf.Abs(gameMenu.transform.localPosition.x) < 50f) gameMenu.transform.localPosition = new Vector3(0, gameMenu.transform.localPosition.y, gameMenu.transform.localPosition.z);
                     animationTimer += Time.deltaTime;
-                    Debug.Log(Mathf.Abs(gameMenu.transform.localPosition.x));
                 }
                 else
                 {
@@ -169,7 +170,6 @@ public class MenuController : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             endMousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            Debug.Log(endMousePos - startMousePos);
             ChangeMenu(endMousePos - startMousePos);
         }
 

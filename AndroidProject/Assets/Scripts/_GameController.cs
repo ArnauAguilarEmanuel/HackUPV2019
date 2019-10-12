@@ -17,6 +17,7 @@ public class _GameController : MonoBehaviour
 {
     public static _GameController instance = null;
 
+    public string currentAirport = "1";
     
     public float _gameDuration = 120;
     public float _targgetChangeTime = 20;
