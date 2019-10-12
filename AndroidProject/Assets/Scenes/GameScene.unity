@@ -904,10 +904,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26b4289fd155e704aa6bea6ece65ec36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameDuration: 120
+  _gameDuration: 5
   _targgetChangeTime: 20
   userName: 
   API: {fileID: 0}
+  speed: 200
 --- !u!1 &1244910882
 GameObject:
   m_ObjectHideFlags: 0

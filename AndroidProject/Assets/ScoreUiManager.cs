@@ -23,7 +23,7 @@ public class ScoreUiManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GetComponent<TextMeshProUGUI>().text = currentScore.ToString();
+        if (GameObject.Find("SuitcaseSpawner").GetComponent<SuitcaseSpawner>().globalTimer < _GameController.instance.gameDuration) GetComponent<TextMeshProUGUI>().text = currentScore.ToString();
 
         if (GetComponent<TextMeshProUGUI>().fontSize > originalSize)
         {

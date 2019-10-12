@@ -18,7 +18,7 @@ public class _GameController : MonoBehaviour
     public static _GameController instance = null;
 
     
-    public float _gameDuration = 60;
+    public float _gameDuration = 5;
     public float _targgetChangeTime = 20;
     private float actualChangeTime = 20;
     private float colorOriginalSize;
@@ -119,9 +119,42 @@ public class _GameController : MonoBehaviour
         StartCoroutine(changeTargetTag());
     }
 
+    private bool state1 = false, state2 = false, state3 = false;
+
+    [SerializeField]
+    private float speed = 10;
     private void Update()
     {
         if (SceneManager.GetActiveScene().buildIndex != 0 && GameObject.Find("Color").GetComponent<TextMeshProUGUI>().fontSize > colorOriginalSize) GameObject.Find("Color").GetComponent<TextMeshProUGUI>().fontSize -= Time.deltaTime * decresSpeed;
+        if (GameObject.Find("SuitcaseSpawner").GetComponent<SuitcaseSpawner>().globalTimer > gameDuration)
+        {
+            if (!state1)
+            {
+                Debug.Log(GameObject.Find("Score").transform.localPosition.y);
+                if (GameObject.Find("Score").transform.localPosition.y > 450)
+                {
+                    GameObject.Find("Score").transform.localPosition -= new Vector3(0, speed * Time.deltaTime, GameObject.Find("Score").transform.localPosition.z);
+                }
+                else state1 = true;
+            }
+            else if (!state2)
+            {
+                GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text + "<b> x" + multiplier + "<b>";
+                state2 = true;
+                Debug.Log(GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text);
+            }
+            else if (!state3)
+            {
+                state3 = true;
+                StartCoroutine(SetMultiplier());
+            }
+        }
+    }
+
+    public IEnumerator SetMultiplier()
+    {
+        yield return new WaitForSeconds(1.5f);
+        GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text += "\n" + playerPoints * multiplier;
     }
 
     public void ProcessSuitcase(string tag, bool lose = false)
@@ -149,7 +182,6 @@ public class _GameController : MonoBehaviour
             combo = 0;
             multiplier+=0.1f;
         }
-        Debug.Log(playerPoints);
 
     }
 
