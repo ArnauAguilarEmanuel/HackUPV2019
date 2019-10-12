@@ -18,7 +18,7 @@ public class _GameController : MonoBehaviour
     public static _GameController instance = null;
 
     
-    public float _gameDuration = 120;
+    public float _gameDuration = 60;
     public float _targgetChangeTime = 20;
     private float actualChangeTime = 20;
     private float colorOriginalSize;

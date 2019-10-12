@@ -14,7 +14,7 @@ public class SuitcaseSpawner : MonoBehaviour
     [SerializeField]
     private float spawnSpeed;
 
-    private float globalTimer;
+    public float globalTimer;
     private float spawnTimer;
 
 
