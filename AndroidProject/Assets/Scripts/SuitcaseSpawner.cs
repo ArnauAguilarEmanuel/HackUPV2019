@@ -14,7 +14,7 @@ public class SuitcaseSpawner : MonoBehaviour
     [SerializeField]
     private float spawnSpeed;
 
-    private float globalTimer;
+    public float globalTimer;
     private float spawnTimer;
 
 
@@ -63,7 +63,5 @@ public class SuitcaseSpawner : MonoBehaviour
             spawnTimer += Time.deltaTime;
             globalTimer += Time.deltaTime;
         }
-        else _GameController.instance.ChangeScene(0);
-        Debug.Log(globalTimer);
     }
 }

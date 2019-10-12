@@ -95,6 +95,7 @@ public class MenuController : MonoBehaviour
                 }
                 OtherUsersScores = false;
             }
+
             if (current == menu.LoggIn)
             {
                 if (gameMenu.GetComponent<RectTransform>().localPosition.y < 0)
