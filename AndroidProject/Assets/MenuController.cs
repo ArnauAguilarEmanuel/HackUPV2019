@@ -15,6 +15,7 @@ public class MenuController : MonoBehaviour
 
     private bool onGameMenu;
     [SerializeField] private float animationTimer;
+    private bool recivedResponse, instantiate;
 
     void Start()
     {
@@ -49,12 +50,23 @@ public class MenuController : MonoBehaviour
                 else
                 {
                     onGameMenu = true;
+                    recivedResponse = true;
                     gameMenu.transform.localPosition = Vector3.zero;
                 }
             }
             else
             {
-                //Game menu logic
+                GameObject target = GameObject.Find("PlaneScrollView").transform.GetChild(0).GetChild(0).gameObject;
+                target.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 220 * 200);
+                if(recivedResponse && !instantiate)
+                {
+                    for(int i = 0; i<200; i++)
+                    {
+                        GameObject aux = Instantiate(PlaneViewPrefab, GameObject.Find("PlaneScrollView").transform.GetChild(0).GetChild(0).transform);
+                        aux.transform.position+= new Vector3(0,target.GetComponent<RectTransform>().rect.height/2-40 - i * 220, 0);
+                    }
+                    instantiate = true;
+                }
             }
         }
     }
