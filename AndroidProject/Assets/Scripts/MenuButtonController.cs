@@ -21,6 +21,7 @@ public class MenuButtonController : MonoBehaviour
     public void LoadNextLevel()
     {
         serverResponded = true;
+        GameObject.Find("Canvas").GetComponent<MenuController>().AnimationTimer = 0;
     }
 
     // Update is called once per frame
@@ -29,7 +30,8 @@ public class MenuButtonController : MonoBehaviour
         if (serverResponded)
         {
             //load next scene
-            GameObject.Find("Debug").GetComponent<TextMeshProUGUI>().text = userName.text + " " + flight.text;
+            //GameObject.Find("Debug").GetComponent<TextMeshProUGUI>().text = userName.text + " " + flight.text;
+            GameObject.Find("Canvas").GetComponent<MenuController>().LoggedIn = true;
         }
     }
 }
