@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class MenuButtonController : MonoBehaviour
 {
 
-    private bool serverResponded = false;
     private TMP_InputField userName;
     private TMP_InputField flight;
 
@@ -35,9 +34,9 @@ public class MenuButtonController : MonoBehaviour
     void Update()
     {
 
-        if (_GameController.instance.API.myUserAvaileable && !serverResponded)
+        if (_GameController.instance.API.myUserAvaileable && !_GameController.instance.serverResponded)
         {
-            serverResponded = true;
+            _GameController.instance.serverResponded = true;
             GameObject.Find("Canvas").GetComponent<MenuController>().AnimationTimer = 0;
             GameObject.Find("Canvas").GetComponent<MenuController>().goToMenu = true;
             GameObject.Find("Canvas").GetComponent<MenuController>().LoggedIn = true;

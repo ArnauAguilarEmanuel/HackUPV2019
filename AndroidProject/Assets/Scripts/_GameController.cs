@@ -36,7 +36,7 @@ public class _GameController : MonoBehaviour
     private int comboRequired;
     public API_Comunication API;
     private GameObject scoreUI;
-
+    public bool serverResponded = false;
 
     void Awake()
     {
@@ -127,6 +127,7 @@ public class _GameController : MonoBehaviour
     private float speed = 10;
     private void Update()
     {
+        if (SceneManager.GetActiveScene().buildIndex == 0) return;
         if (SceneManager.GetActiveScene().buildIndex != 0 && GameObject.Find("Color").GetComponent<TextMeshProUGUI>().fontSize > colorOriginalSize) GameObject.Find("Color").GetComponent<TextMeshProUGUI>().fontSize -= Time.deltaTime * decresSpeed;
         if (GameObject.Find("SuitcaseSpawner").GetComponent<SuitcaseSpawner>().globalTimer > gameDuration)
         {
@@ -153,9 +154,8 @@ public class _GameController : MonoBehaviour
                 state3 = true;
                 if (!updatedData)
                 {
-                    API.RequesAllFlightsScores(_GameController.instance.currentAirport);
-                    API.RequestMyFlightScores(_GameController.instance.API.myUser.flight_id.ToString());
-                    API.RequestBestScores(_GameController.instance.API.myUser.user_id.ToString(), _GameController.instance.API.myUser.flight_id.ToString());
+                    API.myUserAvaileable = true;
+                    serverResponded = false;
                     updatedData = true;
                 }
                 StartCoroutine(SetMultiplier());
@@ -167,7 +167,7 @@ public class _GameController : MonoBehaviour
     public IEnumerator SetMultiplier()
     {
         yield return new WaitForSeconds(1.5f);
-        GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text += "\n" +API.gameReturnedInfo.total_score;
+        GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text += "\n" +(int)API.gameReturnedInfo.total_score;
     }
 
     public IEnumerator setScene(int i, float f)

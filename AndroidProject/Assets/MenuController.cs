@@ -83,11 +83,11 @@ public class MenuController : MonoBehaviour
             if (_GameController.instance.API.top5Availeable)
             {
                 if(_GameController.instance.API.top5.top_5.Length > 0) {
-                    GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[0].score.ToString();
-                    GameObject.Find("Score (1)").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[1].score.ToString();
-                    GameObject.Find("Score (2)").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[2].score.ToString();
-                    GameObject.Find("Score (3)").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[3].score.ToString();
-                    GameObject.Find("Score (4)").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[4].score.ToString();
+                    GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = ((int)_GameController.instance.API.top5.top_5[0].score).ToString();
+                    for (int i = 1; i < _GameController.instance.API.top5.top_5.Length; i++)
+                    {
+                        GameObject.Find("Score (" + i+")").GetComponent<TextMeshProUGUI>().text = ((int)_GameController.instance.API.top5.top_5[i].score).ToString();
+                    }
                     GameObject.Find("Name").GetComponent<TextMeshProUGUI>().text = _GameController.instance.userName;
                     GameObject.Find("FlightNumber").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.myUser.flight_name;
                     UserScoresResponded = false;
@@ -100,9 +100,9 @@ public class MenuController : MonoBehaviour
                 {
                     GameObject aux = Instantiate(FlightViewPrefab, GameObject.Find("FlightScrollView").transform.GetChild(0).GetChild(0).transform);
                     aux.transform.position += new Vector3(0, target.GetComponent<RectTransform>().sizeDelta.y / 2 - 40 - i * 220, 0);
-                    aux.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "x"+_GameController.instance.API.flightScores.total_score[i].total_multiplier.ToString();
+                    aux.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "x"+((int)_GameController.instance.API.flightScores.total_score[i].total_multiplier).ToString();
                     aux.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.flightScores.total_score[i].name;
-                    aux.transform.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.flightScores.total_score[i].total_score.ToString();
+                    aux.transform.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = ((int)_GameController.instance.API.flightScores.total_score[i].total_score).ToString();
                 }
                 OtherUsersScores = false;
             }
@@ -134,7 +134,7 @@ public class MenuController : MonoBehaviour
                             aux.transform.position += new Vector3(0, target.GetComponent<RectTransform>().sizeDelta.y / 2 - 40 - i * 220, 0);
                             aux.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (i + 1).ToString();//set Position number
                             aux.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.airportRanking.airport_scores[i].number.ToString();///set plane name
-                            aux.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.airportRanking.airport_scores[i].total_score.ToString();
+                            aux.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = ((int)_GameController.instance.API.airportRanking.airport_scores[i].total_score).ToString();
                         }
                         instantiate = true;
                     }
