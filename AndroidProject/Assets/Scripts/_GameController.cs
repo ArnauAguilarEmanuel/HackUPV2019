@@ -10,6 +10,15 @@ public class _GameController : MonoBehaviour
     public float _gameDuration = 120;    
     public float gameDuration { get => _gameDuration; }
 
+    private string targetTag;
+    private int playerPoints;
+    private int suitcasePoints;
+    private int multiplier;
+    private int combo;
+    private int comboRequired;
+
+
+
     void Awake()
     {
         //Check if instance already exists
@@ -28,16 +37,43 @@ public class _GameController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-
-    // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
-        
+       playerPoints = 0;
+       suitcasePoints = 10;
+       multiplier = 1;
+       combo = 0;
+       comboRequired = 10;
+       targetTag = GameObject.Find("SuitcaseSpawner").GetComponent<SuitcaseSpawner>().suitcases[Random.Range(0, GameObject.Find("SuitcaseSpawner").GetComponent<SuitcaseSpawner>().suitcases.Length)].tag;
+        Debug.Log(targetTag);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ProcessSuitcase(string tag, bool lose = false)
     {
+        if (!lose)
+        {
+            if (tag == targetTag)
+            {
+                combo++;
+                playerPoints += suitcasePoints * multiplier;
+            }
+        }
+        else
+        {
+            if (tag == targetTag)
+            {
+                combo = 0;
+            }
+        }
         
+        if(combo >= comboRequired)
+        {
+            combo = 0;
+            multiplier++;
+        }
+        Debug.Log(playerPoints);
+
     }
+
+
 }

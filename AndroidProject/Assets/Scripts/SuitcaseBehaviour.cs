@@ -11,6 +11,9 @@ public class SuitcaseBehaviour : MonoBehaviour
     private float speed = 10;
     private Vector3 direction = new Vector3(0, -1, 0);
 
+    private bool _picked;
+    public bool picked { get => _picked; set => _picked = value; }
+
 
     void Start()
     {
@@ -32,11 +35,20 @@ public class SuitcaseBehaviour : MonoBehaviour
 
     private void Update()
     {
-        if (cam.WorldToScreenPoint(transform.position).y < -20) gameObject.SetActive(false);
+        //If arrive bottom
+        if (cam.WorldToScreenPoint(transform.position).y < -20)
+        {
+            _GameController.instance.ProcessSuitcase(gameObject.tag, true);
+            gameObject.SetActive(false);
+        }
+        if (picked)
+        {
+            transform.position = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Vector3.Distance(cam.gameObject.transform.position, Vector3.zero)));
+        }
     }
 
     void FixedUpdate()
     {
-         transform.position += direction * speed * Time.deltaTime;       
+         if(!picked)transform.position += direction * speed * Time.deltaTime;       
     }
 }
