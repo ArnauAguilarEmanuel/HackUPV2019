@@ -7,9 +7,10 @@ public class SuitcasesCollector : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Colision");
-        _GameController.instance.ProcessSuitcase(other.gameObject.tag);
-        other.gameObject.SetActive(false);
+
+        if (other.GetComponent<SuitcaseBehaviour>()) other.GetComponent<SuitcaseBehaviour>().left = true;
+
+        
     }
 
 }

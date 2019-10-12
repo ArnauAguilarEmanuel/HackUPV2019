@@ -35,7 +35,7 @@ public class SuitcaseSpawner : MonoBehaviour
         }
     }
 
-
+    float doWhileCond = 0;
     void Update()
     {
         //In game
@@ -51,7 +51,9 @@ public class SuitcaseSpawner : MonoBehaviour
                     {
                         target = suitcasesList[Random.Range(0, suitcasesList.Count)];
                     }
-                    while (target.activeSelf != false);
+                    while (target.activeSelf != false || doWhileCond >1000);
+                    doWhileCond = 0;
+                    target.SetActive(true);
                     target.GetComponent<SuitcaseBehaviour>().Initializes();
                 }
                 
@@ -61,5 +63,6 @@ public class SuitcaseSpawner : MonoBehaviour
             spawnTimer += Time.deltaTime;
             globalTimer += Time.deltaTime;
         }
+        Debug.Log(globalTimer);
     }
 }
