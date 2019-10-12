@@ -910,6 +910,7 @@ MonoBehaviour:
   userName: 
   multiplier: 0
   API: {fileID: 0}
+  serverResponded: 0
   speed: 200
 --- !u!1 &1244910882
 GameObject:
