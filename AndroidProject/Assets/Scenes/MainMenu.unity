@@ -2480,7 +2480,7 @@ MonoBehaviour:
     type: 3}
   FlightViewPrefab: {fileID: 5117496489188374147, guid: 3088c260bbbf8754a80b0d911a671226,
     type: 3}
-  animationSpeed: 150
+  animationSpeed: 180
   animationTimer: 0
   goToMenu: 0
   current: 3

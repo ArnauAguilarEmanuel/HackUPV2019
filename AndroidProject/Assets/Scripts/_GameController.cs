@@ -145,13 +145,14 @@ public class _GameController : MonoBehaviour
             }
             else if (!state2)
             {
-                GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text + "<b> x" + API.gameReturnedInfo.flight_multiplier + "<b>";
+                GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text + "<b> x" + (int)API.gameReturnedInfo.flight_multiplier + "<b>";
                 state2 = true;
             }
             else if (!state3)
             {
                 state3 = true;
                 StartCoroutine(SetMultiplier());
+                StartCoroutine(setScene(0, 3.5f));
             }
         }
     }
@@ -161,6 +162,13 @@ public class _GameController : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text += "\n" +API.gameReturnedInfo.total_score;
     }
+
+    public IEnumerator setScene(int i, float f)
+    {
+        yield return new WaitForSecondsRealtime(f);
+        SceneManager.LoadScene(i);
+    }
+
 
     public void ProcessSuitcase(string tag, bool lose = false)
     {

@@ -904,9 +904,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26b4289fd155e704aa6bea6ece65ec36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentAirport: 1
   _gameDuration: 5
   _targgetChangeTime: 20
   userName: 
+  multiplier: 0
   API: {fileID: 0}
   speed: 200
 --- !u!1 &1244910882
@@ -942,7 +944,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 0.5, z: 30.49}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: -0.36, z: 0}
 --- !u!23 &1244910884
 MeshRenderer:
   m_ObjectHideFlags: 0

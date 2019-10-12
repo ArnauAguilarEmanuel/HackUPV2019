@@ -34,15 +34,21 @@ public class MenuController : MonoBehaviour
     public void SetMenuToAirport() { current = menu.Airport; animationTimer = 0; }
     public void SetMenuToFlight() { current = menu.Flight; animationTimer = 0; }
 
+    private float originalSpeed;
 
     void setUpPlaneScrollView()
     {
         GameObject.Find("PlaneScrollView");
     }
+    private void Start()
+    {
+        originalSpeed = animationSpeed;
+    }
 
     void ChangeMenu(Vector2 direction) {
         if (direction.x > 400)
         {
+            animationSpeed = originalSpeed * 1.4f;
             if (current == menu.Flight)
             {
                 current = menu.Airport;
@@ -54,7 +60,9 @@ public class MenuController : MonoBehaviour
                 animationTimer = 0;
             }
         }
-        else if (direction.x < -400) {
+        else if (direction.x < -400)
+        {
+            animationSpeed = originalSpeed * 1.4f;
             if (current == menu.User)
             {
                 current = menu.Airport;
@@ -66,6 +74,7 @@ public class MenuController : MonoBehaviour
                 animationTimer = 0;
             }
         }
+        else animationSpeed = originalSpeed;
     }
     void Update()
     {
