@@ -37,11 +37,26 @@ public class EndGameReturnInfo
     public EndGameSendInfo[] top_5;
 }
 
+[System.Serializable]
+public class playerScores
+{
+    public int user_id;
+    public int total_score;
+    public int total_multiplayer;
+}
+
+[System.Serializable]
+public class MyFlightScores
+{
+    public playerScores[] player_scores;
+}
+
 public class TestScript : MonoBehaviour
 {
     private const string URL = "https://euw1.api.riotgames.com/lol/platform/v3/champion-rotations";
     private const string LOG_IN_URL = "192.168.43.165/api/login";
     private const string END_GAME_URL = "192.168.43.165/api/endgame";
+    private const string FLIGHT_SCORES_URL = "192.168.43.165/api/flightscores";
     private const string KEY = "RGAPI-7188bdaf-74c7-483d-a766-c4bb581a69ba";
     private Text response;
 
@@ -50,6 +65,9 @@ public class TestScript : MonoBehaviour
 
     public EndGameReturnInfo gameReturnedInfo;
     public bool gameReturnedInfoAvaileable;
+
+    public MyFlightScores flightScores;
+    public bool flightScoresAvaileable;
 
     public void request()
     {
@@ -64,6 +82,11 @@ public class TestScript : MonoBehaviour
     {
         gameReturnedInfoAvaileable = false;
         StartCoroutine(EndGame(userId, FlightId, score, multiplayer));
+    }
+
+    public void RequestMyFlightScores(string FlightId)
+    {
+        StartCoroutine(GetMyFlightScores(FlightId));
     }
 
     public IEnumerator LogIn(string userName, string Flight)
@@ -85,10 +108,35 @@ public class TestScript : MonoBehaviour
             else
             {
                 string data = req.downloadHandler.text;
-                transform.root.GetChild(1).GetComponent<Text>().text = data;
 
                 myUser = JsonUtility.FromJson<UserInfo>(data);
                 myUserAvaileable = true;
+            }
+        }
+    }
+
+    public IEnumerator GetMyFlightScores(string FlightId)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("flight_id", FlightId);
+        using (UnityWebRequest req = UnityWebRequest.Post(FLIGHT_SCORES_URL, form))
+        {
+            yield return req.SendWebRequest();
+
+            if (req.isNetworkError)
+            {
+                Debug.Log(req.error);
+            }
+            else if (req.isHttpError)
+            {
+                Debug.Log(req.error);
+            }
+            else
+            {
+                string data = req.downloadHandler.text;
+
+                flightScores = JsonUtility.FromJson<MyFlightScores>(data);
+                flightScoresAvaileable = true;
             }
         }
     }
@@ -115,7 +163,6 @@ public class TestScript : MonoBehaviour
             else
             {
                 string data = req.downloadHandler.text;
-                transform.root.GetChild(1).GetComponent<Text>().text = data;
 
                 gameReturnedInfo = JsonUtility.FromJson<EndGameReturnInfo>(data);
                 gameReturnedInfoAvaileable = true;
@@ -161,17 +208,17 @@ public class TestScript : MonoBehaviour
                 Debug.Log(myUser.flight_name);
                 Debug.Log("________________________________________________");
                 auxiliar = true;
-                RequestEndGame(myUser.user_id.ToString(), myUser.flight_id.ToString(), 50000, 12);
+                //RequestEndGame(myUser.user_id.ToString(), myUser.flight_id.ToString(), 50000, 12);
+                RequestMyFlightScores(myUser.flight_id.ToString());
             }
-            if (gameReturnedInfoAvaileable && !auxiliar2)
+            if (flightScoresAvaileable && !auxiliar2)
             {
                 Debug.Log(gameReturnedInfo.total_score);
-                foreach(EndGameSendInfo inf in gameReturnedInfo.top_5)
+                foreach(playerScores inf in flightScores.player_scores)
                 {
                     Debug.Log(inf.user_id);
-                    Debug.Log(inf.flight_id);
-                    Debug.Log(inf.score);
-                    Debug.Log(inf.multiplayer);
+                    Debug.Log(inf.total_score);
+                    Debug.Log(inf.total_multiplayer);
                 }
                 auxiliar2 = true;
             }
