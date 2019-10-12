@@ -82,20 +82,20 @@ public class MenuController : MonoBehaviour
         {
             if (_GameController.instance.API.top5Availeable)
             {
-                if(_GameController.instance.API.top5.top_5.Length > 0) {
-                    GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = ((int)_GameController.instance.API.top5.top_5[0].score).ToString();
-                    for (int i = 1; i < _GameController.instance.API.top5.top_5.Length; i++)
-                    {
-                        GameObject.Find("Score (" + i+")").GetComponent<TextMeshProUGUI>().text = ((int)_GameController.instance.API.top5.top_5[i].score).ToString();
-                    }
-                    GameObject.Find("Name").GetComponent<TextMeshProUGUI>().text = _GameController.instance.userName;
-                    GameObject.Find("FlightNumber").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.myUser.flight_name;
-                    UserScoresResponded = false;
-                }
+               if (_GameController.instance.API.top5.top_5.Length > 0) {
+                   GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = ((int)_GameController.instance.API.top5.top_5[0].score).ToString();
+                   for (int i = 1; i < _GameController.instance.API.top5.top_5.Length; i++)
+                   {
+                       GameObject.Find("Score (" + i+")").GetComponent<TextMeshProUGUI>().text = ((int)_GameController.instance.API.top5.top_5[i].score).ToString();
+                   }
+                   GameObject.Find("Name").GetComponent<TextMeshProUGUI>().text = _GameController.instance.userName;
+                   GameObject.Find("FlightNumber").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.myUser.flight_name;
+                   UserScoresResponded = false;
+               }
             }
             if (_GameController.instance.API.flightScoresAvaileable) {
                 GameObject target = GameObject.Find("FlightScrollView").transform.GetChild(0).GetChild(0).gameObject;
-                target.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 220 * 200);
+                target.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 220 * _GameController.instance.API.flightScores.total_score.Length);
                 for (int i = 0; i < _GameController.instance.API.flightScores.total_score.Length; i++)
                 {
                     GameObject aux = Instantiate(FlightViewPrefab, GameObject.Find("FlightScrollView").transform.GetChild(0).GetChild(0).transform);
@@ -104,7 +104,7 @@ public class MenuController : MonoBehaviour
                     aux.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.flightScores.total_score[i].name;
                     aux.transform.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = ((int)_GameController.instance.API.flightScores.total_score[i].total_score).ToString();
                 }
-                OtherUsersScores = false;
+                _GameController.instance.API.flightScoresAvaileable = false;
             }
 
             if (current == menu.LoggIn)

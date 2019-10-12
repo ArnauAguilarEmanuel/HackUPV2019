@@ -1,8 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
 
 
 //{"freeChampionIds":[13,22,29,41,43,53,59,75,80,83,120,142,163,201,268],"freeChampionIdsForNewPlayers":[18,81,92,141,37,238,19,45,25,64],"maxNewPlayerLevel":10}
@@ -88,52 +86,44 @@ public class MyFlightScores
 
 public class API_Comunication : MonoBehaviour
 {
-    private const string URL = "https://euw1.api.riotgames.com/lol/platform/v3/champion-rotations";
-    private const string LOG_IN_URL = "http://269d78cc.ngrok.io/api/login";         ////// "http://bb3b86bd.ngrok.io/api/login";
-    private const string END_GAME_URL = "http://269d78cc.ngrok.io/api/endgame";
-    private const string TOP5_URL = "http://269d78cc.ngrok.io/api/top5";
-    private const string FLIGHT_SCORES_URL = "http://269d78cc.ngrok.io/api/flightscores";
-    private const string ALL_FLIGHTS_SCORES_URL = "269d78cc.ngrok.io/api/airportscores";
-    private const string KEY = "RGAPI-7188bdaf-74c7-483d-a766-c4bb581a69ba";
-    private Text response;
+    private const string PATH = "http://c2c4f364.ngrok.io";
+    private const string LOG_IN_URL = PATH  + "/api/login";         ////// "http://bb3b86bd.ngrok.io/api/login";
+    private const string END_GAME_URL = PATH + "/api/endgame";
+    private const string TOP5_URL = PATH  + "/api/top5";
+    private const string FLIGHT_SCORES_URL = PATH + "/api/flightscores";
+    private const string ALL_FLIGHTS_SCORES_URL = PATH + "/api/airportscores";
 
-    public basicTop5 top5;
+
+    public basicTop5 top5 = new basicTop5();
     public bool top5Availeable;
 
-    public UserInfo myUser; 
+    public UserInfo myUser = new UserInfo(); 
     public bool myUserAvaileable;
 
-    public EndGameReturnInfo gameReturnedInfo;
+    public EndGameReturnInfo gameReturnedInfo = new EndGameReturnInfo();
     public bool gameReturnedInfoAvaileable;
 
-    public MyFlightScores flightScores;
+    public MyFlightScores flightScores = new MyFlightScores();
     public bool flightScoresAvaileable;
 
-    public allAirportScores airportRanking;
+    public allAirportScores airportRanking = new allAirportScores();
     public bool airportRankingAvaileable;
 
-    public void request()
-    {
-        StartCoroutine(OnResponse());
-    }
     public void LogInUser(string userName, string Flight)
     {
         myUserAvaileable = false;
         StartCoroutine(LogIn(userName, Flight));
     }
-
     public void RequestBestScores(string userId, string FlightId)
     {
         myUserAvaileable = false;
         StartCoroutine(Top5(userId, FlightId));
     }
-
     public void RequestEndGame(string userId, string FlightId, float score, float multiplayer)
     {
         gameReturnedInfoAvaileable = false;
         StartCoroutine(EndGame(userId, FlightId, score, multiplayer));
     }
-
     public void RequestMyFlightScores(string FlightId)
     {
         flightScoresAvaileable = false;
@@ -165,13 +155,12 @@ public class API_Comunication : MonoBehaviour
             {
                 string data = req.downloadHandler.text;
 
-                top5 = JsonUtility.FromJson<basicTop5>(data);
+                //top5 = JsonUtility.FromJson<basicTop5>(data);
+                JsonUtility.FromJsonOverwrite(data, top5);
                 top5Availeable = true;
             }
         }
     }
-
-
     public IEnumerator LogIn(string userName, string Flight)
     {
         WWWForm form = new WWWForm();
@@ -193,12 +182,12 @@ public class API_Comunication : MonoBehaviour
             {
                 string data = req.downloadHandler.text;
 
-                myUser = JsonUtility.FromJson<UserInfo>(data);
+                //myUser = JsonUtility.FromJson<UserInfo>(data);
+                JsonUtility.FromJsonOverwrite(data, myUser);
                 myUserAvaileable = true;
             }
         }
     }
-
     public IEnumerator GetMyFlightScores(string FlightId)
     {
         WWWForm form = new WWWForm();
@@ -219,12 +208,12 @@ public class API_Comunication : MonoBehaviour
             else
             {
                 string data = req.downloadHandler.text;
-                flightScores = JsonUtility.FromJson<MyFlightScores>(data);
+                //flightScores = JsonUtility.FromJson<MyFlightScores>(data);
+                JsonUtility.FromJsonOverwrite(data, flightScores);
                 flightScoresAvaileable = true;
             }
         }
     }
-
     public IEnumerator EndGame(string userId, string FlightId, float score, float multiplayer)
     {
         WWWForm form = new WWWForm();
@@ -248,12 +237,12 @@ public class API_Comunication : MonoBehaviour
             {
                 string data = req.downloadHandler.text;
 
-                gameReturnedInfo = JsonUtility.FromJson<EndGameReturnInfo>(data);
+                //gameReturnedInfo = JsonUtility.FromJson<EndGameReturnInfo>(data);
+                JsonUtility.FromJsonOverwrite(data, gameReturnedInfo);
                 gameReturnedInfoAvaileable = true;
             }
         }
     }
-
     public IEnumerator GetAllFlightsScores(string FlightId)
     {
         WWWForm form = new WWWForm();
@@ -273,29 +262,10 @@ public class API_Comunication : MonoBehaviour
             else
             {
                 string data = req.downloadHandler.text;
-                airportRanking = JsonUtility.FromJson<allAirportScores>(data);
+                //airportRanking = JsonUtility.FromJson<allAirportScores>(data);
+                JsonUtility.FromJsonOverwrite(data, airportRanking);
                 airportRankingAvaileable = true;
             }
         }
     }
-
-    IEnumerator OnResponse()
-    {
-        UnityWebRequest req = UnityWebRequest.Get(URL);
-        req.SetRequestHeader("X-Riot-Token", KEY);
-
-        yield return req.SendWebRequest();
-        string data = req.downloadHandler.text;
-        transform.root.GetChild(1).GetComponent<Text>().text = data;
-
-        RiotResponse resp = new RiotResponse();
-        resp = JsonUtility.FromJson<RiotResponse>(data);
-
-        Debug.Log(resp.maxNewPlayerLevel);
-        Debug.Log(resp.freeChampionIds[2]);
-
-        Debug.Log(req.downloadHandler.text);
-        
-    }
-
 }
