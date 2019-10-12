@@ -73,14 +73,16 @@ public class MenuController : MonoBehaviour
         {
             if (_GameController.instance.API.top5Availeable)
             {
-                GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[0].score.ToString();
-                GameObject.Find("Score (1)").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[1].score.ToString();
-                GameObject.Find("Score (2)").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[2].score.ToString();
-                GameObject.Find("Score (3)").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[3].score.ToString();
-                GameObject.Find("Score (4)").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[4].score.ToString();
-                GameObject.Find("Name").GetComponent<TextMeshProUGUI>().text = _GameController.instance.userName;
-                GameObject.Find("FlightNumber").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.myUser.flight_name;
-                UserScoresResponded = false;
+                if(_GameController.instance.API.top5.top_5.Length > 0) {
+                    GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[0].score.ToString();
+                    GameObject.Find("Score (1)").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[1].score.ToString();
+                    GameObject.Find("Score (2)").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[2].score.ToString();
+                    GameObject.Find("Score (3)").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[3].score.ToString();
+                    GameObject.Find("Score (4)").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.top5.top_5[4].score.ToString();
+                    GameObject.Find("Name").GetComponent<TextMeshProUGUI>().text = _GameController.instance.userName;
+                    GameObject.Find("FlightNumber").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.myUser.flight_name;
+                    UserScoresResponded = false;
+                }
             }
             if (_GameController.instance.API.flightScoresAvaileable) {
                 GameObject target = GameObject.Find("FlightScrollView").transform.GetChild(0).GetChild(0).gameObject;

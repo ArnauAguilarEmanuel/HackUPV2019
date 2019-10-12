@@ -25,10 +25,11 @@ public class UserInfo
 [System.Serializable]
 public class EndGameSendInfo
 {
+    public int id;
     public int user_id;
     public int flight_id;
-    public int score;
-    public int multiplier;
+    public float score;
+    public float multiplier;
 }
 [System.Serializable]
 public class GameInfo
@@ -36,8 +37,8 @@ public class GameInfo
     public int id;
     public int user_id;
     public int flight_id;
-    public int score;//score made 
-    public int multiplier;
+    public float score;//score made 
+    public float multiplier;
 }
 
 [System.Serializable]
@@ -49,6 +50,7 @@ public class EndGameReturnInfo
     public EndGameSendInfo[] top_5;
 }
 
+[System.Serializable]
 public class basicTop5
 {
     public EndGameSendInfo[] top_5;
@@ -60,7 +62,7 @@ public class playerScores
     public string number;
     public int user_id;
     public string name;
-    public int total_score;
+    public float total_score;
     public float total_multiplier;
 }
 
@@ -69,7 +71,7 @@ public class planeScore
 {
     public int flight_id;
     public string number;
-    public int total_score;
+    public float total_score;
 }
 [System.Serializable]
 public class allAirportScores
@@ -126,7 +128,7 @@ public class API_Comunication : MonoBehaviour
         StartCoroutine(Top5(userId, FlightId));
     }
 
-    public void RequestEndGame(string userId, string FlightId, int score, float multiplayer)
+    public void RequestEndGame(string userId, string FlightId, float score, float multiplayer)
     {
         gameReturnedInfoAvaileable = false;
         StartCoroutine(EndGame(userId, FlightId, score, multiplayer));
@@ -146,7 +148,7 @@ public class API_Comunication : MonoBehaviour
     {
         WWWForm form = new WWWForm();
         form.AddField("user_id", userId);
-        form.AddField("flight_id", userId);
+        form.AddField("flight_id", FlightId);
         using (UnityWebRequest req = UnityWebRequest.Post(TOP5_URL, form))
         {
             yield return req.SendWebRequest();
@@ -168,6 +170,7 @@ public class API_Comunication : MonoBehaviour
             }
         }
     }
+
 
     public IEnumerator LogIn(string userName, string Flight)
     {
@@ -216,20 +219,19 @@ public class API_Comunication : MonoBehaviour
             else
             {
                 string data = req.downloadHandler.text;
-                Debug.Log(data);
                 flightScores = JsonUtility.FromJson<MyFlightScores>(data);
                 flightScoresAvaileable = true;
             }
         }
     }
 
-    public IEnumerator EndGame(string userId, string FlightId, int score, float multiplayer)
+    public IEnumerator EndGame(string userId, string FlightId, float score, float multiplayer)
     {
         WWWForm form = new WWWForm();
         form.AddField("user_id", userId);
         form.AddField("flight_id", FlightId);
-        form.AddField("score", score);
-        form.AddField("multiplayer", multiplayer.ToString());
+        form.AddField("score", score.ToString());
+        form.AddField("multiplier", multiplayer.ToString());
         using (UnityWebRequest req = UnityWebRequest.Post(END_GAME_URL, form))
         {
             yield return req.SendWebRequest();

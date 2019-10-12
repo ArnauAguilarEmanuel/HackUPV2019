@@ -31,7 +31,7 @@ public class _GameController : MonoBehaviour
     private string targetTag;
     private float playerPoints;
     private int suitcasePoints;
-    private float multiplier;
+    [SerializeField]private float multiplier;
     private int combo;
     private int comboRequired;
     public API_Comunication API;
@@ -72,7 +72,7 @@ public class _GameController : MonoBehaviour
         API = GetComponent<API_Comunication>();
         if(SceneManager.GetActiveScene().buildIndex != 0)
         {
-            actualChangeTime = 0;
+           actualChangeTime = 0;
            playerPoints = 0;
            suitcasePoints = 10;
            multiplier = 1;
@@ -121,6 +121,7 @@ public class _GameController : MonoBehaviour
     }
 
     private bool state1 = false, state2 = false, state3 = false;
+    private bool requestedEndGame;
 
     [SerializeField]
     private float speed = 10;
@@ -129,9 +130,13 @@ public class _GameController : MonoBehaviour
         if (SceneManager.GetActiveScene().buildIndex != 0 && GameObject.Find("Color").GetComponent<TextMeshProUGUI>().fontSize > colorOriginalSize) GameObject.Find("Color").GetComponent<TextMeshProUGUI>().fontSize -= Time.deltaTime * decresSpeed;
         if (GameObject.Find("SuitcaseSpawner").GetComponent<SuitcaseSpawner>().globalTimer > gameDuration)
         {
+            if (!requestedEndGame)
+            {
+                API.RequestEndGame(API.myUser.user_id.ToString(), API.myUser.flight_id.ToString(), playerPoints, multiplier);
+                requestedEndGame = true;
+            }
             if (!state1)
             {
-                Debug.Log(GameObject.Find("Score").transform.localPosition.y);
                 if (GameObject.Find("Score").transform.localPosition.y > 450)
                 {
                     GameObject.Find("Score").transform.localPosition -= new Vector3(0, speed * Time.deltaTime, GameObject.Find("Score").transform.localPosition.z);
@@ -140,9 +145,8 @@ public class _GameController : MonoBehaviour
             }
             else if (!state2)
             {
-                GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text + "<b> x" + multiplier + "<b>";
+                GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text + "<b> x" + API.gameReturnedInfo.flight_multiplier + "<b>";
                 state2 = true;
-                Debug.Log(GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text);
             }
             else if (!state3)
             {
@@ -155,7 +159,7 @@ public class _GameController : MonoBehaviour
     public IEnumerator SetMultiplier()
     {
         yield return new WaitForSeconds(1.5f);
-        GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text += "\n" + playerPoints * multiplier;
+        GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text += "\n" +API.gameReturnedInfo.total_score;
     }
 
     public void ProcessSuitcase(string tag, bool lose = false)

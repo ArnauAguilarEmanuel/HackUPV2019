@@ -4414,10 +4414,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26b4289fd155e704aa6bea6ece65ec36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameDuration: 120
+  currentAirport: 1
+  _gameDuration: 60
   _targgetChangeTime: 20
   userName: 
+  multiplier: 0
   API: {fileID: 0}
+  speed: 200
 --- !u!4 &1851767202
 Transform:
   m_ObjectHideFlags: 0
@@ -4444,6 +4447,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e27b7f65dbd327d459855413feae1381, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  top5:
+    top_5: []
+  top5Availeable: 0
   myUser:
     user_id: 0
     flight_id: 0
@@ -4451,11 +4457,15 @@ MonoBehaviour:
   myUserAvaileable: 0
   gameReturnedInfo:
     total_score: 0
+    flight_total_score: 0
+    flight_multiplier: 0
     top_5: []
   gameReturnedInfoAvaileable: 0
   flightScores:
-    player_scores: []
+    total_score: []
   flightScoresAvaileable: 0
+  airportRanking:
+    airport_scores: []
   airportRankingAvaileable: 0
 --- !u!1 &1856459472
 GameObject:
