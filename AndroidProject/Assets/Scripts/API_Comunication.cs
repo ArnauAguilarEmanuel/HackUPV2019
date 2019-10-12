@@ -17,7 +17,11 @@ public class UserInfo
 {
     public int user_id;
     public int flight_id;
+    public int airport_id;
     public string flight_name;
+    public string departure;
+    public string arrival;
+    public string status;
 }
 
 [System.Serializable]
@@ -86,7 +90,7 @@ public class MyFlightScores
 
 public class API_Comunication : MonoBehaviour
 {
-    private const string PATH = "http://c2c4f364.ngrok.io";
+    private const string PATH = "http://a8a8f147.ngrok.io";
     private const string LOG_IN_URL = PATH  + "/api/login";         ////// "http://bb3b86bd.ngrok.io/api/login";
     private const string END_GAME_URL = PATH + "/api/endgame";
     private const string TOP5_URL = PATH  + "/api/top5";
@@ -166,7 +170,6 @@ public class API_Comunication : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("user_name", userName);
         form.AddField("flight_name", Flight);
-        form.AddField("airport_id", 1.ToString());
         using (UnityWebRequest req = UnityWebRequest.Post(LOG_IN_URL, form))
         {
             yield return req.SendWebRequest();
