@@ -121,7 +121,7 @@ public class _GameController : MonoBehaviour
     }
 
     private bool state1 = false, state2 = false, state3 = false;
-    private bool requestedEndGame;
+    private bool requestedEndGame, updatedData;
 
     [SerializeField]
     private float speed = 10;
@@ -151,6 +151,13 @@ public class _GameController : MonoBehaviour
             else if (!state3)
             {
                 state3 = true;
+                if (!updatedData)
+                {
+                    API.RequesAllFlightsScores(_GameController.instance.currentAirport);
+                    API.RequestMyFlightScores(_GameController.instance.API.myUser.flight_id.ToString());
+                    API.RequestBestScores(_GameController.instance.API.myUser.user_id.ToString(), _GameController.instance.API.myUser.flight_id.ToString());
+                    updatedData = true;
+                }
                 StartCoroutine(SetMultiplier());
             }
         }
