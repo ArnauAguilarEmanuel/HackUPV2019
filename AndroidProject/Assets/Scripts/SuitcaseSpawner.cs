@@ -39,30 +39,31 @@ public class SuitcaseSpawner : MonoBehaviour
     void Update()
     {
         //In game
-        if(globalTimer < _GameController.instance.gameDuration)
+        if (globalTimer < _GameController.instance.gameDuration)
         {
             //Time to spawn suitcase
             if (spawnTimer >= spawnSpeed)
             {
-                if(suitcasesList.Count > 0)
+                if (suitcasesList.Count > 0)
                 {
                     GameObject target;
                     do
                     {
                         target = suitcasesList[Random.Range(0, suitcasesList.Count)];
                     }
-                    while (target.activeSelf != false || doWhileCond >1000);
+                    while (target.activeSelf != false || doWhileCond > 1000);
                     doWhileCond = 0;
                     target.SetActive(true);
                     target.GetComponent<SuitcaseBehaviour>().Initializes();
                 }
-                
+
                 spawnTimer = 0;
             }
 
             spawnTimer += Time.deltaTime;
             globalTimer += Time.deltaTime;
         }
+        else _GameController.instance.ChangeScene(0);
         Debug.Log(globalTimer);
     }
 }
