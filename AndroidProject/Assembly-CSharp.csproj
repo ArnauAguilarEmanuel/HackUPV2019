@@ -8,8 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{2B2BA22B-00F1-06C3-70F2-83812EF79391}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -64,15 +63,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
+    <Compile Include="Assets\MenuController.cs" />
     <Compile Include="Assets\ScoreUiManager.cs" />
     <Compile Include="Assets\Scripts\_GameController.cs" />
-    <Compile Include="Assets\Scripts\PlayerController.cs" />
-=======
-    <Compile Include="Assets\MenuController.cs" />
-    <Compile Include="Assets\Scripts\_GameController.cs" />
     <Compile Include="Assets\Scripts\MenuButtonController.cs" />
->>>>>>> menu
+    <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\SuitcaseBehaviour.cs" />
     <Compile Include="Assets\Scripts\SuitcasesCollector.cs" />
     <Compile Include="Assets\Scripts\SuitcaseSpawner.cs" />
@@ -183,11 +178,7 @@
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.6f1/Editor/Data/Managed/UnityEngine/UnityEngine.AudioModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ClothModule">
-<<<<<<< HEAD
-      <HintPath>D:/Unity/2019.2.6f1/Editor/Data/Managed/UnityEngine/UnityEngine.ClothModule.dll</HintPath>
-=======
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.6f1/Editor/Data/Managed/UnityEngine/UnityEngine.ClothModule.dll</HintPath>
->>>>>>> menu
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.6f1/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>

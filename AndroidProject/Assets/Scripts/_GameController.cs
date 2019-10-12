@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public static class ExtensionMethods
 {
@@ -54,10 +55,16 @@ public class _GameController : MonoBehaviour
 
     private void Start()
     {
-        /////////ERROOOOOR
-        OnGameStart();
     }
-    public void OnGameStart()
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnGameStart;
+    }
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnGameStart;
+    }
+    public void OnGameStart(Scene scene, LoadSceneMode mode)
     {
         actualChangeTime = 0;
        playerPoints = 0;
@@ -70,6 +77,10 @@ public class _GameController : MonoBehaviour
        scoreUI = GameObject.Find("Score");
         colorOriginalSize = GameObject.Find("Color").GetComponent<TextMeshProUGUI>().fontSize;
        StartCoroutine(changeTargetTag());
+    }
+
+    public void ChangeScene(int i){
+        SceneManager.LoadScene(i,LoadSceneMode.Single);
     }
 
     IEnumerator changeTargetTag()

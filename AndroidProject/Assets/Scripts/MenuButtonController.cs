@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class MenuButtonController : MonoBehaviour
 {
@@ -10,7 +11,6 @@ public class MenuButtonController : MonoBehaviour
     private TMP_InputField userName;
     private TMP_InputField flight;
 
-    
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +23,10 @@ public class MenuButtonController : MonoBehaviour
         serverResponded = true;
         GameObject.Find("Canvas").GetComponent<MenuController>().AnimationTimer = 0;
         GameObject.Find("Canvas").GetComponent<MenuController>().goToMenu = true;
+    }
+    public void LoadNextScene(int i)
+    {
+        SceneManager.LoadScene(i, LoadSceneMode.Single);
     }
 
     // Update is called once per frame
