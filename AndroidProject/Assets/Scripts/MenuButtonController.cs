@@ -22,6 +22,7 @@ public class MenuButtonController : MonoBehaviour
     {
         serverResponded = true;
         GameObject.Find("Canvas").GetComponent<MenuController>().AnimationTimer = 0;
+        GameObject.Find("Canvas").GetComponent<MenuController>().goToMenu = true;
     }
 
     // Update is called once per frame

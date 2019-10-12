@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class MenuController : MonoBehaviour
 {
@@ -13,14 +14,21 @@ public class MenuController : MonoBehaviour
     public bool LoggedIn { get => loggedIn; set => loggedIn = value; }
     public float AnimationTimer { get => animationTimer; set => animationTimer = value; }
 
-    private bool onGameMenu;
     [SerializeField] private float animationTimer;
     private bool recivedResponse, instantiate;
 
-    void Start()
-    {
-        
-    }
+    public bool goToMenu;
+    public enum menu { Airport, User, Flight, LoggIn};
+    public menu current = menu.LoggIn;
+
+    [HideInInspector] public float[] highScores;/// <summary>
+    /// implement
+    /// </summary>
+
+    public void SetMenuToUser() { current = menu.User; animationTimer = 0; }
+    public void SetMenuToAirport() { current = menu.Airport; animationTimer = 0; }
+    public void SetMenuToFlight() { current = menu.Flight; animationTimer = 0; }
+
 
     void setUpPlaneScrollView()
     {
@@ -30,7 +38,7 @@ public class MenuController : MonoBehaviour
     {
         if (loggedIn)
         {
-            if (!onGameMenu)
+            if (current == menu.LoggIn)
             {
                 if (gameMenu.GetComponent<RectTransform>().localPosition.y < 0)
                 {
@@ -46,26 +54,57 @@ public class MenuController : MonoBehaviour
                     }
 
                     animationTimer += Time.deltaTime;
+                    recivedResponse = true;
+                    if (recivedResponse && !instantiate)
+                    {
+                        GameObject target = GameObject.Find("PlaneScrollView").transform.GetChild(0).GetChild(0).gameObject;
+                        target.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 220 * 200);
+                        for (int i = 0; i < 200; i++)
+                        {
+                            GameObject aux = Instantiate(PlaneViewPrefab, GameObject.Find("PlaneScrollView").transform.GetChild(0).GetChild(0).transform);
+                            aux.transform.position += new Vector3(0, target.GetComponent<RectTransform>().rect.height / 2 - 40 - i * 220, 0);
+                            aux.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = i.ToString();
+                        }
+                        instantiate = true;
+                    }
                 }
                 else
                 {
-                    onGameMenu = true;
-                    recivedResponse = true;
+                    current = menu.Airport;
                     gameMenu.transform.localPosition = Vector3.zero;
+                    GameObject.Find("TopBar").transform.parent = transform;
                 }
             }
-            else
+            else if(current == menu.Airport)
             {
-                GameObject target = GameObject.Find("PlaneScrollView").transform.GetChild(0).GetChild(0).gameObject;
-                target.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 220 * 200);
-                if(recivedResponse && !instantiate)
+                if (gameMenu.GetComponent<RectTransform>().localPosition.x != 0)
                 {
-                    for(int i = 0; i<200; i++)
-                    {
-                        GameObject aux = Instantiate(PlaneViewPrefab, GameObject.Find("PlaneScrollView").transform.GetChild(0).GetChild(0).transform);
-                        aux.transform.position+= new Vector3(0,target.GetComponent<RectTransform>().rect.height/2-40 - i * 220, 0);
-                    }
-                    instantiate = true;
+                    gameMenu.transform.position += (gameMenu.GetComponent<RectTransform>().localPosition.x<0)?  new Vector3(Time.deltaTime * animationSpeed * 10 * animationTimer, 0, 0): -new Vector3(Time.deltaTime * animationSpeed * 10 * animationTimer, 0, 0);
+                    if (Mathf.Abs(gameMenu.transform.localPosition.x) < 5f) gameMenu.transform.localPosition = new Vector3(0, gameMenu.transform.localPosition.y, gameMenu.transform.localPosition.z);
+                    animationTimer += Time.deltaTime;
+                    Debug.Log(Mathf.Abs(gameMenu.transform.localPosition.x));
+                }
+                else
+                {
+                    
+                }
+            }
+            else if(current == menu.User)
+            {
+                if(gameMenu.GetComponent<RectTransform>().localPosition.x < 1080)
+                {
+                    gameMenu.transform.position += new Vector3(Time.deltaTime * animationSpeed * 10 * animationTimer, 0, 0);
+                    if (Mathf.Abs(gameMenu.transform.localPosition.x - 1080) < 0.5f) gameMenu.transform.localPosition = new Vector3(1080, gameMenu.transform.localPosition.y, gameMenu.transform.localPosition.z);
+                    animationTimer += Time.deltaTime;
+                }
+            }
+            else if(current == menu.Flight)
+            {
+                if (gameMenu.GetComponent<RectTransform>().localPosition.x > -1080)
+                {
+                    gameMenu.transform.position -= new Vector3(Time.deltaTime * animationSpeed * 10 * animationTimer, 0, 0);
+                    if (Mathf.Abs(gameMenu.transform.localPosition.x - 1080) < 0.5f) gameMenu.transform.localPosition = new Vector3(-1080, gameMenu.transform.localPosition.y, gameMenu.transform.localPosition.z);
+                    animationTimer += Time.deltaTime;
                 }
             }
         }
