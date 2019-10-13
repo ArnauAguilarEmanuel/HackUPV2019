@@ -26,11 +26,9 @@ public class SwitchImageByArrival : MonoBehaviour
             }
             else
             {
-                GetComponent<Image>().color += new Color(0,0,0,1);
-                float originalWidth = GetComponent<RectTransform>().rect.width;
-                float multFactor = GameObject.Find("FlightScrollView").GetComponent<RectTransform>().rect.width / originalWidth;
-                GetComponent<RectTransform>().sizeDelta = new Vector2( (GameObject.Find("Canvas").GetComponent<RectTransform>().rect.width * 3)/2, GetComponent<RectTransform>().rect.height*multFactor/2 );
+                GetComponent<Image>().color += new Color(0,0,0,0.2f);
                 GetComponent<Image>().sprite = sprites[index];
+                //GetComponent<Image>().rectTransform.localScale
             }
             seted = true;
         }
