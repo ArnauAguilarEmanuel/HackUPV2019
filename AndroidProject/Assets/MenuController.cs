@@ -82,14 +82,14 @@ public class MenuController : MonoBehaviour
         {
             if (_GameController.instance.API.top5Availeable)
             {
+               GameObject.Find("FlightNumber").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.myUser.flight_name;
+               GameObject.Find("Name").GetComponent<TextMeshProUGUI>().text = _GameController.instance.userName;
                if (_GameController.instance.API.top5.top_5.Length > 0) {
                    GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = ((int)_GameController.instance.API.top5.top_5[0].score).ToString();
                    for (int i = 1; i < _GameController.instance.API.top5.top_5.Length; i++)
                    {
                        GameObject.Find("Score (" + i+")").GetComponent<TextMeshProUGUI>().text = ((int)_GameController.instance.API.top5.top_5[i].score).ToString();
                    }
-                   GameObject.Find("Name").GetComponent<TextMeshProUGUI>().text = _GameController.instance.userName;
-                   GameObject.Find("FlightNumber").GetComponent<TextMeshProUGUI>().text = _GameController.instance.API.myUser.flight_name;
                    UserScoresResponded = false;
                }
             }
