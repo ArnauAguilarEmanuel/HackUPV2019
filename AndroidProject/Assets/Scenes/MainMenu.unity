@@ -2332,7 +2332,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 1.5
   m_Viewport: {fileID: 1315182676}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
@@ -4521,6 +4521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26b4289fd155e704aa6bea6ece65ec36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  notification: {fileID: 0}
   currentAirport: 1
   _gameDuration: 60
   _targgetChangeTime: 20
@@ -4637,7 +4638,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 1.5
   m_Viewport: {fileID: 1117291480}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}

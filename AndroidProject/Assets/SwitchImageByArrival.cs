@@ -26,7 +26,7 @@ public class SwitchImageByArrival : MonoBehaviour
             }
             else
             {
-                GetComponent<Image>().color += new Color(0,0,0,0.2f);
+                GetComponent<Image>().color += new Color(0,0,0,0.05f);
                 GetComponent<Image>().sprite = sprites[index];
                 //GetComponent<Image>().rectTransform.localScale
             }

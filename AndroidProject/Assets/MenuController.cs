@@ -46,9 +46,10 @@ public class MenuController : MonoBehaviour
     }
 
     void ChangeMenu(Vector2 direction) {
-        if (direction.x > 400)
+        Debug.Log("ChangeMenu");
+        if (direction.x > 1)
         {
-            animationSpeed = originalSpeed * 1.4f;
+            animationSpeed = originalSpeed * 5f;
             if (current == menu.Flight)
             {
                 current = menu.Airport;
@@ -60,9 +61,9 @@ public class MenuController : MonoBehaviour
                 animationTimer = 0;
             }
         }
-        else if (direction.x < -400)
+        else if (direction.x < -1)
         {
-            animationSpeed = originalSpeed * 1.4f;
+            animationSpeed = originalSpeed * 5f;
             if (current == menu.User)
             {
                 current = menu.Airport;
@@ -76,6 +77,8 @@ public class MenuController : MonoBehaviour
         }
         else animationSpeed = originalSpeed;
     }
+
+    private bool tracking = false;
     void Update()
     {
         if (loggedIn)
@@ -179,11 +182,16 @@ public class MenuController : MonoBehaviour
             }
         }
         if (Input.GetMouseButtonDown(0)) startMousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-        if (Input.GetMouseButtonUp(0))
+        else if (Input.GetMouseButton(0))
         {
             endMousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            ChangeMenu(endMousePos - startMousePos);
+            if (Mathf.Abs(startMousePos.x - endMousePos.x) > 180 && !tracking)
+            {
+                ChangeMenu(endMousePos - startMousePos);
+                tracking = true;
+            }
         }
+        if (Input.GetMouseButtonUp(0)) tracking = false;
 
     }
 }
