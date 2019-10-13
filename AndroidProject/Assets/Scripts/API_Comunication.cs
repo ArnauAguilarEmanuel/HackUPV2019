@@ -90,7 +90,7 @@ public class MyFlightScores
 
 public class API_Comunication : MonoBehaviour
 {
-    private const string PATH = "http://a8a8f147.ngrok.io";
+    private const string PATH = "http://07ccc7b8.ngrok.io";
     private const string LOG_IN_URL = PATH  + "/api/login";         ////// "http://bb3b86bd.ngrok.io/api/login";
     private const string END_GAME_URL = PATH + "/api/endgame";
     private const string TOP5_URL = PATH  + "/api/top5";
@@ -120,7 +120,7 @@ public class API_Comunication : MonoBehaviour
     }
     public void RequestBestScores(string userId, string FlightId)
     {
-        myUserAvaileable = false;
+        top5Availeable = false;
         StartCoroutine(Top5(userId, FlightId));
     }
     public void RequestEndGame(string userId, string FlightId, float score, float multiplayer)

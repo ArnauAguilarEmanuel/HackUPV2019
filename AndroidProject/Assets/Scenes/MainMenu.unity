@@ -1429,7 +1429,7 @@ MonoBehaviour:
   CityName:
   - Londres
   - Barcelona
-  index: 0
+  index: -1
 --- !u!1 &802423090
 GameObject:
   m_ObjectHideFlags: 0
@@ -4552,6 +4552,7 @@ MonoBehaviour:
     flight_name: 
     departure: 
     arrival: 
+    status: 
   myUserAvaileable: 0
   gameReturnedInfo:
     total_score: 0

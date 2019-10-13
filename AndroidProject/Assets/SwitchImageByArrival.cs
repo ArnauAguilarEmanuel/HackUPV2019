@@ -18,14 +18,15 @@ public class SwitchImageByArrival : MonoBehaviour
     {
         if (_GameController.instance.API.myUserAvaileable&& !seted)
         {
-            for (int i = 0; i < CityName.Count; i++) if (_GameController.instance.API.myUser.arrival.Contains(CityName[i])) index = i;
+            for (int i = 0; i < CityName.Count; i++) if(_GameController.instance.API.myUser.arrival.Contains(CityName[i])) index = i;
             if (index < 0)
             {
                 GetComponent<Image>().sprite = null;
-                GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                GetComponent<Image>().color -= new Color(0,0,0,1);
             }
             else
             {
+                GetComponent<Image>().color += new Color(0,0,0,1);
                 float originalWidth = GetComponent<RectTransform>().rect.width;
                 float multFactor = GameObject.Find("FlightScrollView").GetComponent<RectTransform>().rect.width / originalWidth;
                 GetComponent<RectTransform>().sizeDelta = new Vector2( (GameObject.Find("Canvas").GetComponent<RectTransform>().rect.width * 3)/2, GetComponent<RectTransform>().rect.height*multFactor/2 );
