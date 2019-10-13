@@ -1439,9 +1439,11 @@ MonoBehaviour:
   sprites:
   - {fileID: 21300000, guid: 0ae8d1ff9be46d946bc6e0b2b16331d1, type: 3}
   - {fileID: 21300000, guid: dfc9fd2e276251d4b94302716e791af5, type: 3}
+  - {fileID: 21300000, guid: e53cf489257ea1740b7afd4f794744a7, type: 3}
   CityName:
   - Londres
   - Barcelona
+  - Paris
   index: -1
 --- !u!1 &802423090
 GameObject:
