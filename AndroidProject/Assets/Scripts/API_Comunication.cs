@@ -90,8 +90,8 @@ public class MyFlightScores
 
 public class API_Comunication : MonoBehaviour
 {
-    private const string PATH = "http://07ccc7b8.ngrok.io";
-    private const string LOG_IN_URL = PATH  + "/api/login";         ////// "http://bb3b86bd.ngrok.io/api/login";
+    private const string PATH = "http://c2c4f364.ngrok.io";
+    private const string LOG_IN_URL = PATH  + "/api/login";         
     private const string END_GAME_URL = PATH + "/api/endgame";
     private const string TOP5_URL = PATH  + "/api/top5";
     private const string FLIGHT_SCORES_URL = PATH + "/api/flightscores";

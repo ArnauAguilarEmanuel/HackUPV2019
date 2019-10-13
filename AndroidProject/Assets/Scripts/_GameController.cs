@@ -16,7 +16,7 @@ public static class ExtensionMethods
 public class _GameController : MonoBehaviour
 {
     public static _GameController instance = null;
-
+    public GameObject notification;
     public string currentAirport = "1";
     
     public float _gameDuration = 5;
@@ -72,6 +72,8 @@ public class _GameController : MonoBehaviour
         API = GetComponent<API_Comunication>();
         if(SceneManager.GetActiveScene().buildIndex != 0)
         {
+           notification = GameObject.Find("Notification");
+           
            actualChangeTime = 0;
            playerPoints = 0;
            suitcasePoints = 10;
@@ -80,10 +82,40 @@ public class _GameController : MonoBehaviour
            comboRequired = 10;
            targetTag = GameObject.Find("SuitcaseSpawner").GetComponent<SuitcaseSpawner>().suitcases[Random.Range(0, GameObject.Find("SuitcaseSpawner").GetComponent<SuitcaseSpawner>().suitcases.Length)].tag;
            Debug.Log(targetTag);
-           scoreUI = GameObject.Find("Score");
-            colorOriginalSize = GameObject.Find("Color").GetComponent<TextMeshProUGUI>().fontSize;
+           scoreUI = GameObject.Find("Score");          
+           colorOriginalSize = GameObject.Find("Color").GetComponent<TextMeshProUGUI>().fontSize;
            StartCoroutine(changeTargetTag());
+           StartCoroutine(SendPlayerNotification(1.5f));
         }
+    }
+
+    IEnumerator SendPlayerNotification(float t)
+    {
+        notification.SetActive(true);
+        TextMeshProUGUI text =notification.GetComponent<TextMeshProUGUI>();
+        if(targetTag == "S_Green")
+        {
+            text.text = "GREEN";
+            text.color = new Color32(0, 202, 21, 255);
+        }
+        else if(targetTag == "S_White")
+        {
+            text.text = "WHITE";
+            text.color = new Color32(255, 255, 255, 255);
+        }
+        else if(targetTag == "S_Red")
+        {
+            text.text = "RED";
+            text.color = new Color32(255, 0, 0, 255);
+        }
+        else
+        {
+            text.text = "BLUE";
+            text.color = new Color32(0, 139, 255, 255);
+        }
+
+        yield return new WaitForSeconds(t);
+        notification.SetActive(false);
     }
 
     public void ChangeScene(int i){
@@ -117,6 +149,7 @@ public class _GameController : MonoBehaviour
             text.color = new Color32(0, 139, 255, 255);
         }
         actualChangeTime = _targgetChangeTime;
+        StartCoroutine(SendPlayerNotification(1.5f));
         StartCoroutine(changeTargetTag());
     }
 
